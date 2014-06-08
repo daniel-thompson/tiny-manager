@@ -28,11 +28,33 @@ STM32F103C8T6 based breakout board. Connections required are:
 - USB to host computer
 - TODO: I2C pins
 
+Usage
+-----
+
+The firmware registers itself as a CDC-ACM device and, under Linux, will
+be presented as ttyACMx where x is typically 0 on "simple" machines
+although will be larger if there is any USB communication or modem device
+installed (for example an unused 3G modem).
+
+Type +help+ to get a list of available commands. On STM32F1 platforms
+the commands available are:
+
+- +echo+ - test command that echos back its input
+- +help+ - shows a list of commands
+- +reboot+ - reboot into DFU mode to allows a firmware upgrade (firmware
+  upgrade mode can also be triggered by pulling up the PA0 pin during power
+  on)
+- +relay1+, +relay2+, +relay3+, +relay4+ - can be used to turn the relay
+  on or off as well as toggling its state or sending a 1 second pulse
+- +uptime+ - show time since power on
+
 Example hardware
 ----------------
 
 http://www.lctech-inc.com/Hardware/Detail.aspx?id=0172e854-77b0-43d5-b300-68e570c914fd[ARM Cortex-M3 STM32F103C8T6 STM32 core board development board] manufactured by http://www.lctech-inc.com[Shenzhen LC Technology (LCTech)]:
 
 image::images/lctech-f103.jpg["LCTech STM32F103C8T6 core board"]
+
+Other suitable boards include the STM32F4Discovery and the Olimex H103.
 
 http://www.ebay.co.uk/sch/i.html?_trksid=p2055845.m570.l1313.TR0.TRC0.H0.X4+relay+board&_nkw=4+relay+board&_sacat=0&_from=R40[Four channel relay board] from ebay.
