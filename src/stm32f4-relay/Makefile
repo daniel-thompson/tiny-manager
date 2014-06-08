@@ -1,5 +1,5 @@
 ##
-## This file is part of i2c-cm3-usb
+## This file is part of the usb-relay project
 ##
 ## Copyright (C) 2009 Uwe Hermann <uwe@hermann-uwe.de>
 ##

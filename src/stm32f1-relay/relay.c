@@ -1,5 +1,5 @@
 /*
- * This file is part of the i2c-star-usb project.
+ * This file is part of the usb-relay project.
  *
  * Copyright (C) 2014 Daniel Thompson <daniel@redfelineninja.org.uk>
  *
