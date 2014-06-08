@@ -1,0 +1,38 @@
+usb-relay - USB relay control module
+====================================
+
+usb-relay is a quick 'n dirty relay controller based on two very cheap
+off-the-shelf boards.
+
+Quickstart
+----------
+
+- Install gcc-arm-embedded compiler toolchain (or similar arm-none-eabi-
+  compiler).
+- +make+
+- +make -C src/bootloader flash+
+- +make -C src/i2c-cm3-usb flash+
+
+To flash the bootloader an STLink v2 must be connected to the target
+boards JTAG/SWD socket.
+
+To flash the main firmware the microcontroller must be connected to the
+host using its own USB socket.
+
+Hardware setup
+--------------
+
+The firmware can be easily ported but has been tested on an small 
+STM32F103C8T6 based breakout board. Connections required are:
+
+- USB to host computer
+- TODO: I2C pins
+
+Example hardware
+----------------
+
+http://www.lctech-inc.com/Hardware/Detail.aspx?id=0172e854-77b0-43d5-b300-68e570c914fd[ARM Cortex-M3 STM32F103C8T6 STM32 core board development board] manufactured by http://www.lctech-inc.com[Shenzhen LC Technology (LCTech)]:
+
+image::images/lctech-f103.jpg["LCTech STM32F103C8T6 core board"]
+
+http://www.ebay.co.uk/sch/i.html?_trksid=p2055845.m570.l1313.TR0.TRC0.H0.X4+relay+board&_nkw=4+relay+board&_sacat=0&_from=R40[Four channel relay board] from ebay.
