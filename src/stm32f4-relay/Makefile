@@ -19,6 +19,6 @@
 
 BINARY = relay
 
-OBJS += console.o console_cdcacm.o
+OBJS += console.o console_cdcacm.o console_cmd_gpio.o
 LDSCRIPT = ../stm32f4-discovery.ld
 include ../../mk/libopencm3.stm32f4xx.mk

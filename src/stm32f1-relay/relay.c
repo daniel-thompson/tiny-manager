@@ -71,63 +71,28 @@ static pt_state_t do_uptime(console_t *c)
 static const console_cmd_t cmd_uptime =
     CONSOLE_CMD_VAR_INIT("uptime", do_uptime);
 
-typedef struct {
-	console_cmd_t cmd;
-	uintptr_t port;
-	uint32_t pin;
-} console_gpio_t;
-
-static pt_state_t do_gpio(console_t *c)
-{
-	console_gpio_t *gpio = containerof(c->cmd, console_gpio_t, cmd);
-	uint32_t *t = &c->scratch.u32[0];
-
-	PT_BEGIN(&c->pt);
-
-	/* the relays are active low (i.e. gpio_clear means on) */
-
-	if (0 == strcmp(c->argv[1], "on"))
-		gpio_clear(gpio->port, gpio->pin);
-	else if (0 == strcmp(c->argv[1], "off"))
-		gpio_set(gpio->port, gpio->pin);
-	else if (0 == strcmp(c->argv[1], "toggle"))
-		gpio_toggle(gpio->port, gpio->pin);
-	else if (0 == strcmp(c->argv[1], "pulse")) {
-		gpio_toggle(gpio->port, gpio->pin);
-		*t = time_now() + 1000000;
-		PT_WAIT_UNTIL(fibre_timeout(*t));
-		gpio_toggle(gpio->port, gpio->pin);
-	} else
-		fprintf(c->out, "Usage: %s on|off|toggle|pulse\n", c->cmd->name);
-
-	PT_END();
-}
-
-const console_gpio_t gpio_relays[] = {
-	{ CONSOLE_CMD_VAR_INIT("relay1", do_gpio), GPIOA, GPIO8 },
-	{ CONSOLE_CMD_VAR_INIT("relay2", do_gpio), GPIOA, GPIO10 },
-	{ CONSOLE_CMD_VAR_INIT("relay3", do_gpio), GPIOA, GPIO9 },
-	{ CONSOLE_CMD_VAR_INIT("relay4", do_gpio), GPIOB, GPIO7 },
-};
+const console_gpio_t gpio_relays[] =
+    { CONSOLE_GPIO_VAR_INIT("relay1", GPIOA, GPIO8,
+			    console_gpio_default_on | console_gpio_open_drain),
+      CONSOLE_GPIO_VAR_INIT("relay2", GPIOA, GPIO10,
+			    console_gpio_default_on | console_gpio_open_drain),
+      CONSOLE_GPIO_VAR_INIT("relay3", GPIOA, GPIO9,
+			    console_gpio_default_on | console_gpio_open_drain),
+      CONSOLE_GPIO_VAR_INIT("relay4", GPIOB, GPIO7,
+			    console_gpio_default_on |
+				console_gpio_open_drain), };
 
 int main(void)
 {
 	rcc_clock_setup_in_hse_8mhz_out_72mhz();
 
 	time_init();
+
 	console_init(&cdcacm_console, stdout);
 	console_register(&cmd_reboot);
 	console_register(&cmd_uptime);
-
-	rcc_periph_clock_enable(RCC_GPIOA);
-	rcc_periph_clock_enable(RCC_GPIOB);
-
-	for (unsigned int i=0; i<lengthof(gpio_relays); i++) {
-		gpio_set(gpio_relays[i].port, gpio_relays[i].pin);
-		gpio_set_mode(gpio_relays[i].port, GPIO_MODE_OUTPUT_2_MHZ,
-			      GPIO_CNF_OUTPUT_OPENDRAIN, gpio_relays[i].pin);
-		console_register(&gpio_relays[i].cmd);
-	}
+	for (unsigned int i=0; i<lengthof(gpio_relays); i++)
+		console_gpio_register(&gpio_relays[i]);
 
 	fibre_scheduler_main_loop();
 }
