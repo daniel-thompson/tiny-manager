@@ -19,9 +19,10 @@
 
 BINARY = relay
 
+DEFS += -DF_CPU=72000000
+OBJS += console.o console_cdcacm.o console_cmd_gpio.o
+
 DFU_ADDRESS = 0x08002000
 LDSCRIPT = ../lctech-f103.ld
-
-OBJS += console.o console_cdcacm.o console_cmd_gpio.o
 
 include ../../mk/libopencm3.stm32f1xx.mk

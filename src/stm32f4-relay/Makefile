@@ -19,6 +19,8 @@
 
 BINARY = relay
 
+DEFS += -DF_CPU=120000000
 OBJS += console.o console_cdcacm.o console_cmd_gpio.o
+
 LDSCRIPT = ../stm32f4-discovery.ld
 include ../../mk/libopencm3.stm32f4xx.mk

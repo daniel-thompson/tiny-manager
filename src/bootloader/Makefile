@@ -19,6 +19,8 @@
 
 BINARY = usbdfu
 
+DEFS += -DF_CPU=48000000
+
 LDSCRIPT = lctech-f103.ld
 
 include ../../mk/libopencm3.stm32f1xx.mk
