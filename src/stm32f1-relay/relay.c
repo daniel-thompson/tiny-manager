@@ -25,6 +25,7 @@
 #include <libopencm3/stm32/rcc.h>
 #include <librfn/console.h>
 #include <librfn/fibre.h>
+#include <librfn/regdump.h>
 #include <librfn/time.h>
 #include <librfn/util.h>
 
@@ -45,8 +46,6 @@ static pt_state_t do_reboot(console_t *c)
 	jump_to_bootloader();
 	return PT_EXITED;
 }
-static const console_cmd_t cmd_reboot =
-    CONSOLE_CMD_VAR_INIT("reboot", do_reboot);
 
 static pt_state_t do_uptime(console_t *c)
 {
@@ -68,11 +67,14 @@ static pt_state_t do_uptime(console_t *c)
 
 	return PT_EXITED;
 }
-static const console_cmd_t cmd_uptime =
-    CONSOLE_CMD_VAR_INIT("uptime", do_uptime);
 
-const console_gpio_t gpio_relays[] =
-    { CONSOLE_GPIO_VAR_INIT("relay1", GPIOA, GPIO8,
+static const console_cmd_t cmds[] = {
+	CONSOLE_CMD_VAR_INIT("reboot", do_reboot),
+	CONSOLE_CMD_VAR_INIT("uptime", do_uptime)
+};
+
+const console_gpio_t gpios[] = {
+      CONSOLE_GPIO_VAR_INIT("relay1", GPIOA, GPIO8,
 			    console_gpio_default_on | console_gpio_open_drain),
       CONSOLE_GPIO_VAR_INIT("relay2", GPIOA, GPIO10,
 			    console_gpio_default_on | console_gpio_open_drain),
@@ -89,10 +91,10 @@ int main(void)
 	time_init();
 
 	console_init(&cdcacm_console, stdout);
-	console_register(&cmd_reboot);
-	console_register(&cmd_uptime);
-	for (unsigned int i=0; i<lengthof(gpio_relays); i++)
-		console_gpio_register(&gpio_relays[i]);
+	for (unsigned int i=0; i<lengthof(cmds); i++)
+		console_register(&cmds[i]);
+	for (unsigned int i=0; i<lengthof(gpios); i++)
+		console_gpio_register(&gpios[i]);
 
 	fibre_scheduler_main_loop();
 }
