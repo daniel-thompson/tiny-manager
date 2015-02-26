@@ -1,0 +1,82 @@
+#!/bin/sh
+
+#
+# targetctl
+#
+# Use usb-relay to turn targets on/off
+#
+
+usage () {
+	echo "Usage: targetctl on|off|reboot <target>" >&2
+	exit 1
+}
+
+# Load user preferences
+if ! [ -e $HOME/.targetctlrc ]
+then
+	echo "ERROR: No configuration file found, check .targetctlrc" >&2
+	cat > $HOME/.targetctlrc << EOF
+#
+# Example .targetctlrc
+#
+
+## default_device can be used to set the default tty. This is only useful
+## on systems that have only one usb-relay device attached.
+#default_device=/dev/ttyACM0
+
+## <target>_relay and <target>_device are used to set the relay number and
+## device for <target>. If <target>_device is omitted then the default_device
+## will be used.
+#example_relay=1
+#example_device=/dev/ttyACM1
+
+## Example configuration
+#default_device=/dev/ttyACM0
+#wandboard_relay=1
+## relay2 is not connected
+## relay3 is not connected
+#hikey_relay=4
+EOF
+	exit 2
+fi
+. $HOME/.targetctlrc
+
+# Argument checking
+if [ $# -ne 2 ]
+then
+	usage
+fi
+
+# Determine the action (or actions) to be taken
+case $1 in
+on)
+	actions="on"
+	;;
+off)
+	actions="off"
+	;;
+reboot)
+	actions="on pulse"
+	;;
+*)
+	usage
+	;;
+esac
+
+# Determine the device and relay to be selected
+device="$(eval echo \$${2}_device)"
+[ -z $device ] && device="$default_device"
+relay="$(eval echo \$${2}_relay)"
+
+# Final sanity check
+if [ -z $device ] || [ -z $relay ]
+then
+	echo "ERROR: Board $2 is not configured, check .targetctlrc"
+	exit 3
+fi
+
+# Perform the actions
+for action in $actions
+do
+	echo "relay$relay $action" >> $device
+done
