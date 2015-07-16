@@ -19,7 +19,7 @@
 
 BINARY = relay
 
-DEFS += -DF_CPU=120000000
+DEFS += -DF_CPU=120000000 -DCONFIG_USB_MAX_POWER=500
 OBJS += console.o console_cdcacm.o console_cmd_gpio.o
 
 LDSCRIPT = ../stm32f4-discovery.ld
