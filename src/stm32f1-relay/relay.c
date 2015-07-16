@@ -73,16 +73,18 @@ static const console_cmd_t cmds[] = {
 	CONSOLE_CMD_VAR_INIT("uptime", do_uptime)
 };
 
+#define ON_WITH_OPEN_DRAIN (console_gpio_default_on | console_gpio_open_drain)
+
 const console_gpio_t gpios[] = {
-      CONSOLE_GPIO_VAR_INIT("relay1", GPIOA, GPIO8,
-			    console_gpio_default_on | console_gpio_open_drain),
-      CONSOLE_GPIO_VAR_INIT("relay2", GPIOA, GPIO10,
-			    console_gpio_default_on | console_gpio_open_drain),
-      CONSOLE_GPIO_VAR_INIT("relay3", GPIOA, GPIO9,
-			    console_gpio_default_on | console_gpio_open_drain),
-      CONSOLE_GPIO_VAR_INIT("relay4", GPIOB, GPIO7,
-			    console_gpio_default_on |
-				console_gpio_open_drain), };
+	CONSOLE_GPIO_VAR_INIT("relay1", GPIOB, GPIO12, ON_WITH_OPEN_DRAIN),
+	CONSOLE_GPIO_VAR_INIT("relay2", GPIOB, GPIO13, ON_WITH_OPEN_DRAIN),
+	CONSOLE_GPIO_VAR_INIT("relay3", GPIOB, GPIO14, ON_WITH_OPEN_DRAIN),
+	CONSOLE_GPIO_VAR_INIT("relay4", GPIOB, GPIO15, ON_WITH_OPEN_DRAIN),
+	CONSOLE_GPIO_VAR_INIT("relay5", GPIOA, GPIO8, ON_WITH_OPEN_DRAIN),
+	CONSOLE_GPIO_VAR_INIT("relay6", GPIOA, GPIO9, ON_WITH_OPEN_DRAIN),
+	CONSOLE_GPIO_VAR_INIT("relay7", GPIOA, GPIO10, ON_WITH_OPEN_DRAIN),
+	CONSOLE_GPIO_VAR_INIT("relay8", GPIOB, GPIO6, ON_WITH_OPEN_DRAIN),
+};
 
 int main(void)
 {
