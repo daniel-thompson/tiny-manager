@@ -31,6 +31,9 @@ STM32F103C8T6 based breakout board. Connections required are:
 - GPIOA  8-10  ->  relay 5-7
 - GPIOB  7     ->  relay 8
 
+All the GPIO connections are on one side of the controller board (and the
+first seven are sequentially allocated).
+
 Usage
 -----
 
@@ -43,12 +46,17 @@ Type +help+ to get a list of available commands. On STM32F1 platforms
 the commands available are:
 
 - +echo+ - test command that echos back its input
+- +id+ - reports a unique device serial number (the same number is also
+  reported as the USB serial number)
 - +help+ - shows a list of commands
+- +led+ - manipulate the LED on the board (for testing, takes the same
+  arguments as the relay command)
 - +reboot+ - reboot into DFU mode to allows a firmware upgrade (firmware
   upgrade mode can also be triggered by resetting the board whilst leaving
   it plugged into the host)
 - +relay1+ to +relay8+ - can be used to turn the relay
   on or off as well as toggling its state or sending a 1 second pulse
+- +version+ - reports firmware version and build date
 - +uptime+ - show time since power on
 
 Example hardware
