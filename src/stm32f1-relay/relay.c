@@ -21,6 +21,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <libopencm3/cm3/scb.h>
+#include <libopencm3/stm32/desig.h>
 #include <libopencm3/stm32/gpio.h>
 #include <libopencm3/stm32/rcc.h>
 #include <librfn/console.h>
@@ -38,6 +39,16 @@ static void jump_to_bootloader(void)
 
 	memcpy(marker, key, sizeof(key));
 	scb_reset_system(); /* Will never return. */
+}
+
+static pt_state_t do_id(console_t *c)
+{
+	char serial_no[25];
+
+	desig_get_unique_id_as_string(serial_no, sizeof(serial_no));
+	fprintf(c->out, "%s\n", serial_no);
+
+	return PT_EXITED;
 }
 
 static pt_state_t do_reboot(console_t *c)
@@ -68,9 +79,18 @@ static pt_state_t do_uptime(console_t *c)
 	return PT_EXITED;
 }
 
+static pt_state_t do_version(console_t *c)
+{
+	fprintf(c->out, "usb-relay version %s (%s %s)\n", VERSION, __DATE__,
+		__TIME__);
+	return PT_EXITED;
+}
+
 static const console_cmd_t cmds[] = {
+	CONSOLE_CMD_VAR_INIT("id", do_id),
 	CONSOLE_CMD_VAR_INIT("reboot", do_reboot),
-	CONSOLE_CMD_VAR_INIT("uptime", do_uptime)
+	CONSOLE_CMD_VAR_INIT("uptime", do_uptime),
+	CONSOLE_CMD_VAR_INIT("version", do_version)
 };
 
 #define ON_WITH_OPEN_DRAIN (console_gpio_default_on | console_gpio_open_drain)
@@ -84,6 +104,8 @@ const console_gpio_t gpios[] = {
 	CONSOLE_GPIO_VAR_INIT("relay6", GPIOA, GPIO9, ON_WITH_OPEN_DRAIN),
 	CONSOLE_GPIO_VAR_INIT("relay7", GPIOA, GPIO10, ON_WITH_OPEN_DRAIN),
 	CONSOLE_GPIO_VAR_INIT("relay8", GPIOB, GPIO6, ON_WITH_OPEN_DRAIN),
+	CONSOLE_GPIO_VAR_INIT("led", GPIOC, GPIO13, console_gpio_active_low |
+						    console_gpio_default_on),
 };
 
 int main(void)

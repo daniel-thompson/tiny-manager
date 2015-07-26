@@ -97,6 +97,7 @@ CXXFLAGS	+= -fno-common -ffunction-sections -fdata-sections
 CPPFLAGS	+= -MD
 CPPFLAGS	+= -Wall -Wundef
 CPPFLAGS	+= -I$(INCLUDE_DIR) $(DEFS)
+CPPFLAGS	+= -DVERSION='"$(shell git describe --tags --dirty=+ || echo UNKNOWN)"'
 
 ###############################################################################
 # Linker flags
