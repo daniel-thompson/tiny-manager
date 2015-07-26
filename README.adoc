@@ -15,7 +15,7 @@ Quickstart
   +make -C src/bootloader BMP_PORT=/dev/ttyACM0 flash+ for a Black Magic Probe.
 - Use the bootloader to install the main application using the microcontroller
   boards own USB socket:
-  +make -C src/i2c-cm3-usb flash+
+  +make -C src/stm32f1-relay flash+
 
 Hardware setup
 --------------
