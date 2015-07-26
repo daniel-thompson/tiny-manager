@@ -4,6 +4,8 @@ usb-relay - USB relay control module
 usb-relay is a quick 'n dirty relay controller based on two very cheap
 off-the-shelf boards.
 
+image::images/combined_boards.jpg["Assembled usb-relay device"]
+
 Quickstart
 ----------
 
@@ -63,3 +65,5 @@ image::images/stm32f103c8t6_dev_board.jpg["STM32F103C8T6 microcontroller develop
 Other suitable boards include the STM32F4Discovery and the Olimex H103.
 
 http://hobbycomponents.com/relays/88-8-channel-5v-relay-module[Eight channel relay board] from specialist supplier (or eBay)
+
+image::images/relay_board.jpg["Eight channel relay board"]
