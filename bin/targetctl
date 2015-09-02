@@ -67,6 +67,21 @@ esac
 device="$(eval echo \$${2}_device)"
 [ -z $device ] && device="$default_device"
 relay="$(eval echo \$${2}_relay)"
+invert="$(eval echo \$${2}_invert)"
+
+# Exchange on/off if the signal is inverted
+if [ "$invert" = "y" ]
+then
+	case "$actions" in
+	on)
+		actions="off"
+		;;
+	off)
+		actions="on"
+		;;
+	esac
+fi
+
 
 # Final sanity check
 if [ -z $device ] || [ -z $relay ]
