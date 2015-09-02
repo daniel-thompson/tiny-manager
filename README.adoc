@@ -59,6 +59,22 @@ the commands available are:
 - +version+ - reports firmware version and build date
 - +uptime+ - show time since power on
 
+udev rules
+----------
+
+The firmware uses the STM32 unique device ID to provide every physical
+instance with a unique serial number. This allows udev rules to be
+introduced to ensure stable device enumeration regardless of any changes
+to the USB topology.
+
+    SUBSYSTEM=="tty", ATTRS{manufacturer}=="redfelineninja.org.uk", ATTRS{serial}=="045101780587252555FFC660", SYMLINK+="ttyrelayC660"
+    SUBSYSTEM=="tty", ATTRS{manufacturer}=="redfelineninja.org.uk", ATTRS{serial}=="7301C2152B72E52DE2744F3B", SYMLINK+="ttyrelay4F3B"
+
+The serial number can picked up from the kernel log (+dmesg+) or using udevadm:
++udevadm info --attribute-walk /dev/ttyACM0 | grep serial+ .
+
+udevadm can also be used to re-apply the rule if any changes are made to the symlink: +sudo udevadm trigger /dev/ttyACM0+
+
 Example hardware
 ----------------
 
