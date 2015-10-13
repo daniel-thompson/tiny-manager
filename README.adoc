@@ -10,13 +10,18 @@ Quickstart
 ----------
 
 - Install gcc-arm-embedded compiler toolchain (or similar arm-none-eabi-
-  compiler).
+  compiler), openocd and dfu-util.
+- Clone this repo:
+  +git clone https://github.com/daniel-thompson/usb-relay.git+
+- Fetch the libraries:
+  +cd usb-relay; git submodule update --init --recursive+
+- Build the firmware:
 - +make+
 - Use JTAG/SWD programmer to install the booloader. Either
   +make -C src/bootloader flash+ for STLink v2 or
   +make -C src/bootloader BMP_PORT=/dev/ttyACM0 flash+ for a Black Magic Probe.
 - Use the bootloader to install the main application using the microcontroller
-  boards own USB socket:
+  board's own USB socket:
   +make -C src/stm32f1-relay flash+
 
 Hardware setup
