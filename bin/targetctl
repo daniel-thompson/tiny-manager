@@ -79,6 +79,9 @@ then
 	off)
 		actions="on"
 		;;
+	on?pulse)
+		actions="off pulse"
+		;;
 	esac
 fi
 
