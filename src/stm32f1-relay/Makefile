@@ -22,6 +22,10 @@ BINARY = relay
 DEFS += -DF_CPU=72000000 -DCONFIG_USB_MAX_POWER=500
 OBJS += console.o console_cdcacm.o console_cmd_gpio.o
 
+ifdef CONFIG_PLATFORM_MINI_STLINK
+DEFS += -DCONFIG_PLATFORM_MINI_STLINK=1
+endif
+
 DFU_ADDRESS = 0x08002000
 LDSCRIPT = ../lctech-f103.ld
 

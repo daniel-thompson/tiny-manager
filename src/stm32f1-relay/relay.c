@@ -94,7 +94,28 @@ static const console_cmd_t cmds[] = {
 };
 
 #define ON_WITH_OPEN_DRAIN (console_gpio_default_on | console_gpio_open_drain)
+#define ON_AND_ACTIVE_LOW  (console_gpio_default_on | console_gpio_active_low)
 
+#ifdef CONFIG_PLATFORM_MINI_STLINK
+const console_gpio_t gpios[] = {
+	/*
+	 * SWIM and SWCLK are connected to multiple pins (hence the
+	 * commented out alternatives below). There are few useful
+	 * peripherals whose alternative functions are attached to
+	 * these pins, although shorting PB9 with the neighbouring
+	 * PB8 pin does make I2C1 available on PB6 (RST) and PB9
+	 * (SWIM).
+	 */
+	CONSOLE_GPIO_VAR_INIT("rst", GPIOB, GPIO6, 0),
+	CONSOLE_GPIO_VAR_INIT("swdio", GPIOB, GPIO14, 0),
+	CONSOLE_GPIO_VAR_INIT("swim", GPIOB, GPIO8, 0),
+	//CONSOLE_GPIO_VAR_INIT("swim", GPIOB, GPIO11, 0),
+	CONSOLE_GPIO_VAR_INIT("swclk", GPIOB, GPIO13, 0),
+	//CONSOLE_GPIO_VAR_INIT("swclk", GPIOA, GPIO5, 0),
+	CONSOLE_GPIO_VAR_INIT("led", GPIOA, GPIO9, 0),
+};
+
+#else
 const console_gpio_t gpios[] = {
 	CONSOLE_GPIO_VAR_INIT("relay1", GPIOB, GPIO12, ON_WITH_OPEN_DRAIN),
 	CONSOLE_GPIO_VAR_INIT("relay2", GPIOB, GPIO13, ON_WITH_OPEN_DRAIN),
@@ -107,6 +128,7 @@ const console_gpio_t gpios[] = {
 	CONSOLE_GPIO_VAR_INIT("led", GPIOC, GPIO13, console_gpio_active_low |
 						    console_gpio_default_on),
 };
+#endif
 
 int main(void)
 {
