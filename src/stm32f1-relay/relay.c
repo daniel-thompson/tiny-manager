@@ -130,6 +130,29 @@ const console_gpio_t gpios[] = {
 };
 #endif
 
+#ifdef CONFIG_PLATFORM_MINI_STLINK
+static int blink_fibre(fibre_t *fibre)
+{
+	static int i;
+	static int32_t time;
+
+	PT_BEGIN_FIBRE(fibre);
+
+	rcc_periph_clock_enable(RCC_GPIOA);
+
+	time = time_now();
+	for (i = 0; i < 16; i++) {
+		gpio_toggle(GPIOA, GPIO9);
+
+		time += 100000;
+		PT_WAIT_UNTIL(fibre_timeout(time));
+	}
+
+	PT_END();
+}
+static fibre_t blink_task = FIBRE_VAR_INIT(blink_fibre);
+#endif
+
 int main(void)
 {
 	rcc_clock_setup_in_hse_8mhz_out_72mhz();
@@ -142,6 +165,9 @@ int main(void)
 	for (unsigned int i=0; i<lengthof(gpios); i++)
 		console_gpio_register(&gpios[i]);
 
+#ifdef CONFIG_PLATFORM_MINI_STLINK
+	fibre_run(&blink_task);
+#endif
 	fibre_scheduler_main_loop();
 }
 
