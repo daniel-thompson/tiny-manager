@@ -21,6 +21,10 @@ BINARY = usbdfu
 
 DEFS += -DF_CPU=48000000
 
+ifdef CONFIG_PLATFORM_MINI_STLINK
+DEFS += -DCONFIG_PLATFORM_MINI_STLINK=1
+endif
+
 LDSCRIPT = lctech-f103.ld
 
 include ../../mk/libopencm3.stm32f1xx.mk

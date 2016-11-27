@@ -106,11 +106,11 @@ const console_gpio_t gpios[] = {
 	 * PB8 pin does make I2C1 available on PB6 (RST) and PB9
 	 * (SWIM).
 	 */
-	CONSOLE_GPIO_VAR_INIT("rst", GPIOB, GPIO6, 0),
-	CONSOLE_GPIO_VAR_INIT("swdio", GPIOB, GPIO14, 0),
-	CONSOLE_GPIO_VAR_INIT("swim", GPIOB, GPIO8, 0),
+	CONSOLE_GPIO_VAR_INIT("rst", GPIOB, GPIO6, 0), // pulled down
+	CONSOLE_GPIO_VAR_INIT("swdio", GPIOB, GPIO14, 0), // pulled up
+	CONSOLE_GPIO_VAR_INIT("swim", GPIOB, GPIO8, 0), // pulled up
 	//CONSOLE_GPIO_VAR_INIT("swim", GPIOB, GPIO11, 0),
-	CONSOLE_GPIO_VAR_INIT("swclk", GPIOB, GPIO13, 0),
+	CONSOLE_GPIO_VAR_INIT("swclk", GPIOB, GPIO13, 0), // pulled up
 	//CONSOLE_GPIO_VAR_INIT("swclk", GPIOA, GPIO5, 0),
 	CONSOLE_GPIO_VAR_INIT("led", GPIOA, GPIO9, 0),
 };

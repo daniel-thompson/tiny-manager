@@ -110,8 +110,12 @@ const struct usb_config_descriptor config = {
 
 static const char *usb_strings[] = {
 	"redfelineninja.org.uk",
+#ifdef CONFIG_PLATFORM_MINI_STLINK
+	"DFU bootloader for Mini STLink",
+#else
 	"DFU bootloader",
-	"v1.3",
+#endif
+	"v1.4",
 	/* This string is used by ST Microelectronics' DfuSe utility. */
 	"@Internal Flash   /0x08000000/8*001Ka,56*001Kg",
 };
@@ -237,6 +241,8 @@ static usbd_device *usb_init(void)
 	uint32_t t;
 	usbd_device *usb_dev;
 
+	rcc_periph_clock_enable(RCC_GPIOA);
+
 	/* lower hotplug and leave enough time for the host to notice */
 	gpio_set_mode(GPIOA, GPIO_MODE_OUTPUT_2_MHZ, GPIO_CNF_OUTPUT_PUSHPULL,
 		      GPIO11 | GPIO12);
@@ -264,13 +270,19 @@ int main(void)
 	bool found_key, found_anti_key, found_pin_reset;
 	usbd_device *usb_dev;
 
-	rcc_periph_clock_enable(RCC_GPIOA);
-
 	/* Check and clear the marker value */
 	found_key = (0 == strcmp(marker, key));
 	found_anti_key = (0 == strcmp(marker, anti_key));
 	memset(marker, 0, sizeof(key));
 
+#ifdef CONFIG_PLATFORM_MINI_STLINK
+	/* This platform doesn't have a reset button so we must detect
+	 * a pattern on the GPIO pins (which are pulled up by default
+	 * but can be pulled down using jumper cables)
+	 */
+	rcc_periph_clock_enable(RCC_GPIOB);
+	found_pin_reset = !gpio_get(GPIOB, GPIO8 | GPIO13);
+#else
 	/* Check reset reason and clear it. Note that we can only clear
 	 * the reset reason in the bootloader because we know the application
 	 * doesn't use it.
@@ -280,14 +292,11 @@ int main(void)
 	    !(RCC_CSR & (RCC_CSR_LPWRRSTF | RCC_CSR_WWDGRSTF |
 			 RCC_CSR_IWDGRSTF | RCC_CSR_SFTRSTF | RCC_CSR_PORRSTF));
 	RCC_CSR |= RCC_CSR_RMVF;
+#endif
 
 	if ((!found_key && !found_pin_reset) || found_anti_key) {
 		/* Boot the application if it's valid. */
 		if ((*(volatile uint32_t *)APP_ADDRESS & 0x2FFE0000) == 0x20000000) {
-			/* Restore GPIOA to reset defaults */
-			gpio_set_mode(GPIOA, GPIO_MODE_INPUT,
-				      GPIO_CNF_INPUT_FLOAT, 0xffff);
-
 			/* Set vector table base address. */
 			SCB_VTOR = APP_ADDRESS & 0xFFFF;
 			/* Initialise master stack pointer. */
@@ -299,16 +308,11 @@ int main(void)
 	}
 
 	rcc_clock_setup_in_hsi_out_48mhz();
-	rcc_periph_clock_enable(RCC_GPIOB);
 
 	/* set the anti-key so that the next reset causes us to leave the
 	 * bootloader if there is a valid application flashed
 	 */
 	memcpy(marker, anti_key, sizeof(anti_key));
-
-	gpio_set_mode(GPIOA, GPIO_MODE_OUTPUT_2_MHZ,
-		      GPIO_CNF_OUTPUT_PUSHPULL, GPIO4);
-	gpio_clear(GPIOA, GPIO4);
 
 	time_init();
 	usb_dev = usb_init();
