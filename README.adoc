@@ -34,7 +34,7 @@ STM32F103C8T6 based breakout board. Connections required are:
 - 5v and GND to relay board
 - GPIOB 12-15  ->  relay 1-4
 - GPIOA  8-10  ->  relay 5-7
-- GPIOB  7     ->  relay 8
+- GPIOB  6     ->  relay 8
 
 All the GPIO connections are on one side of the controller board (and the
 first seven are sequentially allocated).
