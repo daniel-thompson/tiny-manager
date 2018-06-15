@@ -66,7 +66,7 @@ libopencm3:
 	$(Q)$(MAKE) -C libopencm3 TARGETS="$(TARGETS)"
 
 #EXAMPLE_DIRS:=$(sort $(dir $(wildcard $(addsuffix /*/*/Makefile,$(addprefix examples/,$(TARGETS))))))
-EXAMPLE_DIRS := src/bootloader src/stm32f1-relay src/stm32f4-relay
+EXAMPLE_DIRS := src/bootloader src/stm32f1-relay src/stm32f4-relay src/stm32f4-relay-96bcarbon
 $(EXAMPLE_DIRS): libopencm3
 	@printf "  BUILD   $@\n";
 	$(Q)$(MAKE) --directory=$@ OPENCM3_DIR=$(OPENCM3_DIR) $(EXAMPLE_RULES)

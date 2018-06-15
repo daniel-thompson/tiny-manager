@@ -91,7 +91,7 @@ http://item.taobao.com/item.htm?spm=a1z10.1.w4004-386456545.4.3eifcC&id=22097803
 
 image::images/stm32f103c8t6_dev_board.jpg["STM32F103C8T6 microcontroller development board"]
 
-Other suitable boards include the STM32F4Discovery and the Olimex H103.
+Other suitable boards include the STM32F4Discovery, Carbon (by Seeed and 96Boards) and the Olimex H103.
 
 http://hobbycomponents.com/relays/88-8-channel-5v-relay-module[Eight channel relay board] from specialist supplier (or eBay)
 
