@@ -6,8 +6,8 @@ off-the-shelf boards.
 
 ![Assembled usb-relay device](images/combined_boards.jpg)
 
-Quickstart
-----------
+Quickstart for STM32F103 boards
+-------------------------------
 
 - Install the [Arm Embedded
   Toolchain](https://developer.arm.com/open-source/gnu-toolchain/gnu-rm)
@@ -28,8 +28,8 @@ Quickstart
 Hardware setup
 --------------
 
-The firmware can be easily ported but has been tested on an small
-STM32F103C8T6 based breakout board. Connections required are:
+The firmware can be easily ported but has been most heavily tested on
+STM32F103C8T6 based breakout boards. Connections required are:
 
 - USB to host computer
 - 5v and GND to relay board
@@ -39,6 +39,17 @@ STM32F103C8T6 based breakout board. Connections required are:
 
 All the GPIO connections are on one side of the controller board (and the
 first seven are sequentially allocated).
+
+Alternative boards
+------------------
+
+- [Carbon by Seeed and 96Boards](src/stm32f4-relay-96bcarbon/README.md).
+- STM32F4-Discovery (undocumented)
+- Most STM32F103 breakout boards have jumpers enabling them to
+  permanently assert USB hotplug. If your board does not do this then you
+  will likely have to configure a GPIO pin to assert hotplug.  usb-relay
+  does not contain code for this. Adding it is an exercise for the
+  reader!
 
 Usage
 -----
@@ -91,8 +102,6 @@ will work out-of-the-box.
 [STM32F103C8T6 microcontroller development board](http://item.taobao.com/item.htm?spm=a1z10.1.w4004-386456545.4.3eifcC&id=22097803050) from vcc-gnd.com. Normally very easy to source on eBay.
 
 ![STM32F103C8T6 microcontroller development](images/stm32f103c8t6_dev_board.jpg)
-
-Other suitable boards include the STM32F4Discovery, Carbon (by Seeed and 96Boards) and the Olimex H103.
 
 [Eight channel relay board](http://hobbycomponents.com/relays/88-8-channel-5v-relay-module) from specialist supplier (or eBay)
 
