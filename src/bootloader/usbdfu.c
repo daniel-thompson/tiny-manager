@@ -115,7 +115,7 @@ static const char *usb_strings[] = {
 #else
 	"DFU bootloader",
 #endif
-	"v1.4",
+	"v1.5",
 	/* This string is used by ST Microelectronics' DfuSe utility. */
 	"@Internal Flash   /0x08000000/8*001Ka,56*001Kg",
 };
@@ -154,11 +154,13 @@ static void usbdfu_getstatus_complete(usbd_device *usbd_dev, struct usb_setup_da
 					uint32_t *dat = (uint32_t *)(prog.buf + 1);
 					flash_erase_page(*dat);
 				}
+				break;
 			case CMD_SETADDR:
 				{
 					uint32_t *dat = (uint32_t *)(prog.buf + 1);
 					prog.addr = *dat;
 				}
+				break;
 			}
 		} else {
 			uint32_t baseaddr = prog.addr + ((prog.blocknum - 2) *
