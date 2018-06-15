@@ -85,6 +85,12 @@ then
 	esac
 fi
 
+# Prepend relay if needed
+case "$relay" in
+[0-9]*)
+	relay=relay$relay
+	;;
+esac
 
 # Final sanity check
 if [ -z $device ] || [ -z $relay ]
@@ -96,5 +102,6 @@ fi
 # Perform the actions
 for action in $actions
 do
-	echo "relay$relay $action" >> $device
+	echo "$relay $action >> $device"
+	echo "$relay $action" >> $device
 done
