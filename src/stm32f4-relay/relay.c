@@ -63,7 +63,7 @@ const console_gpio_t gpio_relays[] = {
 
 int main(void)
 {
-	rcc_clock_setup_hse_3v3(&hse_8mhz_3v3[CLOCK_3V3_120MHZ]);
+	rcc_clock_setup_hse_3v3(&rcc_hse_8mhz_3v3[RCC_CLOCK_3V3_120MHZ]);
 
 	time_init();
 	console_init(&cdcacm_console, stdout);
