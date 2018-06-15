@@ -4,30 +4,31 @@ usb-relay - USB relay control module
 usb-relay is a quick 'n dirty relay controller based on two very cheap
 off-the-shelf boards.
 
-image::images/combined_boards.jpg["Assembled usb-relay device"]
+![Assembled usb-relay device](images/combined_boards.jpg)
 
 Quickstart
 ----------
 
-- Install gcc-arm-embedded compiler toolchain (or similar arm-none-eabi-
-  compiler), openocd and dfu-util.
+- Install the [Arm Embedded
+  Toolchain](https://developer.arm.com/open-source/gnu-toolchain/gnu-rm)
+  (or similar arm-none-eabi- compiler), openocd and dfu-util.
 - Clone this repo:
-  +git clone https://github.com/daniel-thompson/usb-relay.git+
+  `git clone https://github.com/daniel-thompson/usb-relay.git`
 - Fetch the libraries:
-  +cd usb-relay; git submodule update --init --recursive+
+  `cd usb-relay; git submodule update --init --recursive`
 - Build the firmware:
-- +make+
+  `make`
 - Use JTAG/SWD programmer to install the booloader. Either
-  +make -C src/bootloader flash+ for STLink v2 or
-  +make -C src/bootloader BMP_PORT=/dev/ttyACM0 flash+ for a Black Magic Probe.
+  `make -C src/bootloader flash` for STLink v2 or
+  `make -C src/bootloader BMP_PORT=/dev/ttyACM0 flash` for a Black Magic Probe.
 - Use the bootloader to install the main application using the microcontroller
   board's own USB socket:
-  +make -C src/stm32f1-relay flash+
+  `make -C src/stm32f1-relay flash`
 
 Hardware setup
 --------------
 
-The firmware can be easily ported but has been tested on an small 
+The firmware can be easily ported but has been tested on an small
 STM32F103C8T6 based breakout board. Connections required are:
 
 - USB to host computer
@@ -47,22 +48,22 @@ be presented as ttyACMx where x is typically 0 on "simple" machines
 although will be larger if there is any USB communication or modem device
 installed (for example an unused 3G modem).
 
-Type +help+ to get a list of available commands. On STM32F1 platforms
+Type `help` to get a list of available commands. On STM32F1 platforms
 the commands available are:
 
-- +echo+ - test command that echos back its input
-- +id+ - reports a unique device serial number (the same number is also
+- `echo` - test command that echos back its input
+- `id` - reports a unique device serial number (the same number is also
   reported as the USB serial number)
-- +help+ - shows a list of commands
-- +led+ - manipulate the LED on the board (for testing, takes the same
+- `help` - shows a list of commands
+- `led` - manipulate the LED on the board (for testing, takes the same
   arguments as the relay command)
-- +reboot+ - reboot into DFU mode to allows a firmware upgrade (firmware
+- `reboot` - reboot into DFU mode to allows a firmware upgrade (firmware
   upgrade mode can also be triggered by resetting the board whilst leaving
   it plugged into the host)
-- +relay1+ to +relay8+ - can be used to turn the relay
+- `relay1` to `relay8` - can be used to turn the relay
   on or off as well as toggling its state or sending a 1 second pulse
-- +version+ - reports firmware version and build date
-- +uptime+ - show time since power on
+- `version` - reports firmware version and build date
+- `uptime` - show time since power on
 
 udev rules
 ----------
@@ -75,10 +76,10 @@ to the USB topology.
     SUBSYSTEM=="tty", ATTRS{manufacturer}=="redfelineninja.org.uk", ATTRS{serial}=="045101780587252555FFC660", SYMLINK+="ttyrelayC660"
     SUBSYSTEM=="tty", ATTRS{manufacturer}=="redfelineninja.org.uk", ATTRS{serial}=="7301C2152B72E52DE2744F3B", SYMLINK+="ttyrelay4F3B"
 
-The serial number can picked up from the kernel log (+dmesg+) or using udevadm:
-+udevadm info --attribute-walk /dev/ttyACM0 | grep serial+ .
+The serial number can picked up from the kernel log (`dmesg`) or using udevadm:
+`udevadm info --attribute-walk /dev/ttyACM0 | grep serial` .
 
-udevadm can also be used to re-apply the rule if any changes are made to the symlink: +sudo udevadm trigger /dev/ttyACM0+
+udevadm can also be used to re-apply the rule if any changes are made to the symlink: `sudo udevadm trigger /dev/ttyACM0`
 
 Example hardware
 ----------------
@@ -87,12 +88,12 @@ usb-relay should readily port to most STM32-based microcontroller boards.
 However the following example hardware is easily (and cheaply) availabe and
 will work out-of-the-box.
 
-http://item.taobao.com/item.htm?spm=a1z10.1.w4004-386456545.4.3eifcC&id=22097803050[STM32F103C8T6 microcontroller development board] from vcc-gnd.com. Normally very easy to source on eBay.
+[STM32F103C8T6 microcontroller development board](http://item.taobao.com/item.htm?spm=a1z10.1.w4004-386456545.4.3eifcC&id=22097803050) from vcc-gnd.com. Normally very easy to source on eBay.
 
-image::images/stm32f103c8t6_dev_board.jpg["STM32F103C8T6 microcontroller development board"]
+![STM32F103C8T6 microcontroller development](images/stm32f103c8t6_dev_board.jpg)
 
 Other suitable boards include the STM32F4Discovery, Carbon (by Seeed and 96Boards) and the Olimex H103.
 
-http://hobbycomponents.com/relays/88-8-channel-5v-relay-module[Eight channel relay board] from specialist supplier (or eBay)
+[Eight channel relay board](http://hobbycomponents.com/relays/88-8-channel-5v-relay-module) from specialist supplier (or eBay)
 
-image::images/relay_board.jpg["Eight channel relay board"]
+![Eight channel relay board](images/relay_board.jpg)
