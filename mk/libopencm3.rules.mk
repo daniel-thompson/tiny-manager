@@ -230,7 +230,7 @@ else
 	@printf "  GDB   $(*).elf (flash)\n"
 	$(Q)$(GDB) --batch \
 		   -ex 'target extended-remote $(BMP_PORT)' \
-		   -x $(SCRIPT_DIR)/black_magic_probe_flash.scr \
+		   -x ../../mk/black_magic_probe_flash.scr \
 		   $(*).elf
 endif
 else
